@@ -3,9 +3,18 @@ public class labirinto {
     private static final char PAREDE_VERTICAL = '|';
     private static final char PAREDE_INTERNA = '@';
     private static final char VAZIO = ' ';
+    private static final char DESTINO = 'D';
+    private static final char INICIO = 'I';
+    private static int linhaInicio;
+    private static int colunaInicio;
     private static final int TAMANHO = 10;
     private static final double PROBABILIDADE = 0.7;
     private static char[][] tabuleiro;
+
+    public static int gerarNumero(int minimo, int maximo) {
+        int valor = (int) Math.round(Math.random()  * (maximo - minimo));
+        return minimo + valor;
+    }
 
     private static void inicializarMatriz(){
         for(int i=0; i < TAMANHO; i++){
@@ -23,6 +32,13 @@ public class labirinto {
                 }
             }
         }
+        linhaInicio = gerarNumero(1, TAMANHO / 2 - 1);
+        colunaInicio = gerarNumero(1, TAMANHO / 2 - 1);
+        tabuleiro[linhaInicio][colunaInicio] = INICIO;
+
+        int linhaDestino = gerarNumero(TAMANHO / 2, TAMANHO - 2);
+        int colunaDestino = gerarNumero(TAMANHO / 2, TAMANHO - 2);
+        tabuleiro[linhaDestino][colunaDestino] = DESTINO;
     }
 
     private static void imprimir(){
