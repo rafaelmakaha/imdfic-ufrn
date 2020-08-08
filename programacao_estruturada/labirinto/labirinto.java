@@ -5,6 +5,8 @@ public class labirinto {
     private static final char VAZIO = ' ';
     private static final char DESTINO = 'D';
     private static final char INICIO = 'I';
+    private static final char CAMINHO = '.';
+    private static final char SEM_SAIDA = 'x';
     private static int linhaInicio;
     private static int colunaInicio;
     private static final int TAMANHO = 10;
@@ -41,6 +43,60 @@ public class labirinto {
         tabuleiro[linhaDestino][colunaDestino] = DESTINO;
     }
 
+    private static boolean tentarCaminho(int proxLinha, int proxColuna) { 
+        boolean achou = false; 
+        if (tabuleiro[proxLinha][proxColuna] == DESTINO) { 
+            achou = true; 
+        } else if (posicaoVazia(proxLinha, proxColuna)) { 
+            // marcar 
+            tabuleiro[proxLinha][proxColuna] = CAMINHO; 
+            imprimir(); 
+            achou = procurarCaminho(proxLinha, proxColuna); 
+            if (!achou) { 
+                tabuleiro[proxLinha][proxColuna] = SEM_SAIDA; 
+                imprimir(); 
+            } 
+        } 
+        return achou; 
+    }
+
+    public static boolean posicaoVazia(int linha, int coluna) { 
+        boolean vazio = false; 
+        if (linha >= 0 && coluna >= 0 && linha < TAMANHO && coluna < TAMANHO) { 
+            vazio = (tabuleiro[linha][coluna] == VAZIO); 
+        } 
+        return vazio; 
+    }
+
+    public static boolean procurarCaminho(int linhaAtual, int colunaAtual) { 
+        int proxLinha; 
+        int proxColuna; 
+        boolean achou = false; 
+        // tenta subir 
+        proxLinha = linhaAtual - 1; 
+        proxColuna = colunaAtual; 
+        achou = tentarCaminho(proxLinha, proxColuna); 
+        // tenta descer 
+        if (!achou) { 
+            proxLinha = linhaAtual + 1; 
+            proxColuna = colunaAtual; 
+            achou = tentarCaminho(proxLinha, proxColuna); 
+        } 
+        // tenta à esquerda 
+        if (!achou) { 
+            proxLinha = linhaAtual; 
+            proxColuna = colunaAtual - 1; 
+            achou = tentarCaminho(proxLinha, proxColuna); 
+        } 
+        // tenta à direita 
+        if (!achou) { 
+            proxLinha = linhaAtual; 
+            proxColuna = colunaAtual + 1; 
+            achou = tentarCaminho(proxLinha, proxColuna); 
+        } 
+        return achou; 
+    }
+
     private static void imprimir(){
         for(int i=0; i < TAMANHO; i++){
             for(int j=0; j < TAMANHO; j++){
@@ -54,5 +110,12 @@ public class labirinto {
         tabuleiro = new char[TAMANHO][TAMANHO];
         inicializarMatriz();
         imprimir();
+        System.out.println("\n- Procurando solução -\n"); 
+        boolean achou = procurarCaminho(linhaInicio, colunaInicio); 
+        if (achou) { 
+            System.out.println("ACHOU O CAMINHO!"); 
+        } else { 
+            System.out.println("Não tem caminho!"); 
+        }
     }
 }
