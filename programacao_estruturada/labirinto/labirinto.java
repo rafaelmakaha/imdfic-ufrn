@@ -1,8 +1,10 @@
 public class labirinto {
     private static final char PAREDE_HORIZONTAL = '-';
     private static final char PAREDE_VERTICAL = '|';
+    private static final char PAREDE_INTERNA = '@';
     private static final char VAZIO = ' ';
     private static final int TAMANHO = 10;
+    private static final double PROBABILIDADE = 0.7;
     private static char[][] tabuleiro;
 
     private static void inicializarMatriz(){
@@ -14,7 +16,11 @@ public class labirinto {
         }
         for(int i=1; i < TAMANHO - 1; i++){
             for(int j=1; j < TAMANHO - 1; j++){
-                tabuleiro[i][j] = VAZIO;
+                if(Math.random() > PROBABILIDADE){
+                    tabuleiro[i][j] = PAREDE_INTERNA;
+                }else{
+                    tabuleiro[i][j] = VAZIO;
+                }
             }
         }
     }
